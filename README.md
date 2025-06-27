@@ -269,11 +269,14 @@ Este proyecto está licenciado bajo la Licencia MIT. Ver el archivo `LICENSE` pa
 
 ## Soporte
 
-Para reportar bugs o solicitar funcionalidades:
+Para reportar bugs:
 
 1. Abrir un issue en GitHub
 2. Incluir información detallada del problema
 3. Proporcionar ejemplo de código si es posible
+
+Solicitar funcionalidades:
+1.contactar a dev.cristian.caysm@gmail.com
 
 ## Changelog
 
