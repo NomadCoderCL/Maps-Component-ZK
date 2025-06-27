@@ -1,0 +1,177 @@
+/* Estilos para el componente de mapa ZK */
+.z-mapcomponent {
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #f5f5f5;
+}
+
+.z-mapcomponent .ol-viewport {
+    width: 100%;
+    height: 100%;
+}
+
+/* Estilos para controles del mapa */
+.z-mapcomponent .ol-control {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.z-mapcomponent .ol-control:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.z-mapcomponent .ol-control button {
+    background-color: transparent;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+}
+
+.z-mapcomponent .ol-control button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para zoom controls */
+.z-mapcomponent .ol-zoom {
+    top: 8px;
+    left: 8px;
+}
+
+.z-mapcomponent .ol-zoom .ol-zoom-in,
+.z-mapcomponent .ol-zoom .ol-zoom-out {
+    width: 24px;
+    height: 24px;
+    line-height: 22px;
+    text-align: center;
+    margin: 1px;
+}
+
+/* Estilos para attribution */
+.z-mapcomponent .ol-attribution {
+    bottom: 4px;
+    right: 4px;
+    max-width: 50%;
+    font-size: 11px;
+}
+
+.z-mapcomponent .ol-attribution ul {
+    color: #666;
+    font-size: 11px;
+    line-height: 14px;
+    margin: 0;
+    padding: 2px 4px;
+}
+
+/* Estilos para popup de marcadores */
+.z-mapcomponent .ol-popup {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    font-size: 12px;
+    max-width: 200px;
+    z-index: 1000;
+}
+
+.z-mapcomponent .ol-popup:before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px 5px 0;
+    border-style: solid;
+    border-color: #ccc transparent;
+}
+
+.z-mapcomponent .ol-popup:after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -4px;
+    border-width: 4px 4px 0;
+    border-style: solid;
+    border-color: white transparent;
+}
+
+.z-mapcomponent .ol-popup .popup-title {
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.z-mapcomponent .ol-popup .popup-description {
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Estilos para el estado de carga */
+.z-mapcomponent.loading {
+    background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="%23ccc" stroke-width="2" stroke-dasharray="31.416" stroke-dashoffset="31.416"><animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/><animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/></circle></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .z-mapcomponent .ol-control {
+        font-size: 12px;
+    }
+    
+    .z-mapcomponent .ol-zoom .ol-zoom-in,
+    .z-mapcomponent .ol-zoom .ol-zoom-out {
+        width: 20px;
+        height: 20px;
+        line-height: 18px;
+    }
+    
+    .z-mapcomponent .ol-attribution {
+        font-size: 10px;
+        max-width: 70%;
+    }
+}
+
+/* Tema oscuro */
+.z-mapcomponent.dark-theme {
+    background-color: #333;
+    border-color: #555;
+}
+
+.z-mapcomponent.dark-theme .ol-control {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+.z-mapcomponent.dark-theme .ol-control:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.z-mapcomponent.dark-theme .ol-control button {
+    color: white;
+}
+
+.z-mapcomponent.dark-theme .ol-control button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.z-mapcomponent.dark-theme .ol-popup {
+    background-color: #333;
+    border-color: #555;
+    color: white;
+}
+
+.z-mapcomponent.dark-theme .ol-popup:before {
+    border-color: #555 transparent;
+}
+
+.z-mapcomponent.dark-theme .ol-popup:after {
+    border-color: #333 transparent;
+}

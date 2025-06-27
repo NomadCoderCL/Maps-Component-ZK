@@ -1,0 +1,9 @@
+jdk:
+  - openjdk11
+before_install:
+  - echo "Preparando entorno para ZK Map Components"
+install:
+  - echo "Instalando ZK Map Components"
+  - mvn clean install -DskipTests
+env:
+  MAVEN_OPTS: "-Xmx2048m -XX:MaxPermSize=512m"

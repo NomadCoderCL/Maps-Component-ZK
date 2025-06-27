@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-addon>
+    <addon-name>zkmap-leaflet</addon-name>
+    <language-name>xul/html</language-name>
+    <depends>zul</depends>
+    <depends>zkmap-core</depends>
+    
+    <version>
+        <version-class>com.zkoss.component.map.leaflet.Version</version-class>
+        <version-uid>1.0.0</version-uid>
+    </version>
+    
+    <component>
+        <component-name>lfmap</component-name>
+        <component-class>com.zkoss.component.map.leaflet.LFMapComponent</component-class>
+        <widget-class>zkoss.component.map.leaflet.LFMap</widget-class>
+        <mold>
+            <mold-name>default</mold-name>
+            <mold-uri>mold/lfmap.js</mold-uri>
+        </mold>
+        <stylesheet>css/lfmap.css</stylesheet>
+        
+        <!-- Eventos -->
+        <custom-attribute>
+            <attribute-name>onMapClick</attribute-name>
+            <property-name>onMapClick</property-name>
+            <attribute-type>event</attribute-type>
+        </custom-attribute>
+        <custom-attribute>
+            <attribute-name>onMarkerClick</attribute-name>
+            <property-name>onMarkerClick</property-name>
+            <attribute-type>event</attribute-type>
+        </custom-attribute>
+    </component>
+    
+    <!-- CSS de Leaflet -->
+    <stylesheet href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- JavaScript de Leaflet -->
+    <javascript src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" charset="UTF-8"/>
+</language-addon>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    
+    <window title="Ejemplos Avanzados - Componente de Mapa ZK" border="normal" width="100%" height="100%">
+        
+        <tabbox>
+            <tabs>
+                <tab label="Múltiples Marcadores"/>
+                <tab label="Geolocalización"/>
+                <tab label="Rutas y Polígonos"/>
+                <tab label="Integración con Datos"/>
+            </tabs>
+            
+            <tabpanels>
+                <!-- Panel 1: Múltiples Marcadores -->
+                <tabpanel>
+                    <vbox spacing="10px" style="padding: 10px;">
+                        <hbox spacing="10px" align="center">
+                            <button id="addCitiesBtn" label="Agregar Ciudades Principales"/>
+                            <button id="addRandomBtn" label="Agregar Marcadores Aleatorios"/>
+                            <button id="clearAllBtn" label="Limpiar Todo"/>
+                        </hbox>
+                        
+                        <mapcomponent id="multiMarkersMap" 
+                                     width="100%" 
+                                     height="500px"
+                                     latitude="40.4168"
+                                     longitude="-3.7038"
+                                     zoom="6"
+                                     mapType="osm">
+                        </mapcomponent>
+                    </vbox>
+                </tabpanel>
+                
+                <!-- Panel 2: Geolocalización -->
+                <tabpanel>
+                    <vbox spacing="10px" style="padding: 10px;">
+                        <hbox spacing="10px" align="center">
+                            <button id="locateBtn" label="Obtener Mi Ubicación"/>
+                            <label id="locationStatus" value="Ubicación no obtenida"/>
+                        </hbox>
+                        
+                        <mapcomponent id="geoMap" 
+                                     width="100%" 
+                                     height="500px"
+                                     latitude="40.4168"
+                                     longitude="-3.7038"
+                                     zoom="10"
+                                     mapType="osm">
+                        </mapcomponent>
+                    </vbox>
+                </tabpanel>
+                
+                <!-- Panel 3: Rutas y Polígonos -->
+                <tabpanel>
+                    <vbox spacing="10px" style="padding: 10px;">
+                        <hbox spacing="10px" align="center">
+                            <button id="drawRouteBtn" label="Dibujar Ruta"/>
+                            <button id="drawPolygonBtn" label="Dibujar Polígono"/>
+                            <button id="clearShapesBtn" label="Limpiar Formas"/>
+                        </hbox>
+                        
+                        <mapcomponent id="shapesMap" 
+                                     width="100%" 
+                                     height="500px"
+                                     latitude="40.4168"
+                                     longitude="-3.7038"
+                                     zoom="10"
+                                     mapType="osm">
+                        </mapcomponent>
+                    </vbox>
+                </tabpanel>
+                
+                <!-- Panel 4: Integración con Datos -->
+                <tabpanel>
+                    <vbox spacing="10px" style="padding: 10px;">
+                        <hbox spacing="10px" align="center">
+                            <button id="loadDataBtn" label="Cargar Datos"/>
+                            <combobox id="dataSourceCombo" width="150px" readonly="true">
+                                <comboitem label="Restaurantes" value="restaurants"/>
+                                <comboitem label="Hoteles" value="hotels"/>
+                                <comboitem label="Gasolineras" value="gas_stations"/>
+                            </combobox>
+                        </hbox>
+                        
+                        <mapcomponent id="dataMap" 
+                                     width="100%" 
+                                     height="500px"
+                                     latitude="40.4168"
+                                     longitude="-3.7038"
+                                     zoom="12"
+                                     mapType="osm">
+                        </mapcomponent>
+                    </vbox>
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+        
+        <zscript><![CDATA[
+            import com.zkoss.component.map.*;
+            import org.zkoss.zul.*;
+            import org.zkoss.zk.ui.event.*;
+            import org.zkoss.zk.ui.util.Clients;
+            import java.util.Random;
+            
+            Random random = new Random();
+            
+            // Datos de ciudades principales
+            Object[][] cities = {
+                {"Madrid", 40.4168, -3.7038},
+                {"Barcelona", 41.3851, 2.1734},
+                {"Valencia", 39.4699, -0.3763},
+                {"Sevilla", 37.3891, -5.9845},
+                {"Bilbao", 43.2627, -2.9253},
+                {"Málaga", 36.7213, -4.4216},
+                {"Granada", 37.1773, -3.5986}
+            };
+            
+            // Event listeners para Panel 1
+            addCitiesBtn.addEventListener("onClick", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    multiMarkersMap.clearMarkers();
+                    
+                    for (int i = 0; i < cities.length; i++) {
+                        Object[] city = cities[i];
+                        multiMarkersMap.addMarker(
+                            (Double)city[1], (Double)city[2], 
+                            (String)city[0], 
+                            "Ciudad principal de España"
+                        );
+                    }
+                    
+                    Clients.showNotification("Ciudades principales agregadas", 
+                        "info", null, null, 3000);
+                }
+            });
+            
+            addRandomBtn.addEventListener("onClick", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    // Agregar 10 marcadores aleatorios en España
+                    for (int i = 0; i < 10; i++) {
+                        double lat = 36.0 + random.nextDouble() * 8.0; // Entre 36 y 44
+                        double lng = -9.0 + random.nextDouble() * 12.0; // Entre -9 y 3
+                        
+                        multiMarkersMap.addMarker(lat, lng, 
+                            "Marcador " + (i + 1), 
+                            "Marcador aleatorio #" + (i + 1));
+                    }
+                    
+                    Clients.showNotification("10 marcadores aleatorios agregados", 
+                        "info", null, null, 3000);
+                }
+            });
+            
+            clearAllBtn.addEventListener("onClick", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    multiMarkersMap.clearMarkers();
+                    Clients.showNotification("Todos los marcadores eliminados", 
+                        "info", null, null, 3000);
+                }
+            });
+            
+            // Event listeners para Panel 2
+            locateBtn.addEventListener("onClick", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    locationStatus.setValue("Obteniendo ubicación...");
+                    
+                    // Simular geolocalización (en una implementación real, 
+                    // se usaría JavaScript del lado cliente)
+                    Clients.evalJavaScript(
+                        "if (navigator.geolocation) {" +
+                        "  navigator.geolocation.getCurrentPosition(function(position) {" +
+                        "    var lat = position.coords.latitude;" +
+                        "    var lng = position.coords.longitude;" +
+                        "    zkau.send({uuid: '" + geoMap.getUuid() + "', cmd: 'setLocation', data: [lat, lng]});" +
+                        "  }, function(error) {" +
+                        "    alert('Error obteniendo ubicación: ' + error.message);" +
+                        "  });" +
+                        "} else {" +
+                        "  alert('Geolocalización no soportada por este navegador.');" +
+                        "}"
+                    );
+                }
+            });
+            
+            // Event listeners para Panel 3
+            drawRouteBtn.addEventListener("onClick", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    // Dibujar una ruta de ejemplo entre Madrid y Barcelona
+                    shapesMap.clearMarkers();
+                    shapesMap.addMarker(40.4168, -3.7038, "Madrid", "Punto de inicio");
+                    shapesMap.addMarker(41.3851, 2.1734, "Barcelona", "Punto de destino");
+                    
+                    Clients.showNotification("Ruta Madrid-Barcelona creada", 
+                        "info", null, null, 3000);
+                }
+            });
+            
+            drawPolygonBtn.addEventListener("onClick", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    // Crear un polígono de ejemplo alrededor de Madrid
+                    double centerLat = 40.4168;
+                    double centerLng = -3.7038;
+                    double radius = 0.1;
+                    
+                    shapesMap.clearMarkers();
+                    
+                    // Agregar marcadores en los vértices del polígono
+                    for (int i = 0; i < 6; i++) {
+                        double angle = 2 * Math.PI * i / 6;
+                        double lat = centerLat + radius * Math.cos(angle);
+                        double lng = centerLng + radius * Math.sin(angle);
+                        
+                        shapesMap.addMarker(lat, lng, "Vértice " + (i + 1), "");
+                    }
+                    
+                    Clients.showNotification("Polígono hexagonal creado", 
+                        "info", null, null, 3000);
+                }
+            });
+            
+            clearShapesBtn.addEventListener("onClick", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    shapesMap.clearMarkers();
+                    Clients.showNotification("Formas eliminadas", 
+                        "info", null, null, 3000);
+                }
+            });
+            
+            // Event listeners para Panel 4
+            loadDataBtn.addEventListener("onClick", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    String dataType = dataSourceCombo.getSelectedItem().getValue();
+                    dataMap.clearMarkers();
+                    
+                    // Simular datos de diferentes tipos
+                    Object[][] sampleData = null;
+                    String description = "";
+                    
+                    if ("restaurants".equals(dataType)) {
+                        sampleData = new Object[][]{
+                            {"Restaurante Casa Botín", 40.4146, -3.7094},
+                            {"Restaurante DiverXO", 40.4378, -3.6795},
+                            {"Taberna La Bola", 40.4192, -3.7075},
+                            {"Restaurante Sobrino de Botín", 40.4146, -3.7094}
+                        };
+                        description = "Restaurante tradicional";
+                    } else if ("hotels".equals(dataType)) {
+                        sampleData = new Object[][]{
+                            {"Hotel Ritz", 40.4154, -3.6936},
+                            {"Hotel Palace", 40.4149, -3.6951},
+                            {"Hotel Villa Magna", 40.4243, -3.6871},
+                            {"Hotel Wellington", 40.4222, -3.6871}
+                        };
+                        description = "Hotel de lujo";
+                    } else if ("gas_stations".equals(dataType)) {
+                        sampleData = new Object[][]{
+                            {"Gasolinera Repsol Castellana", 40.4300, -3.6900},
+                            {"Gasolinera Cepsa Atocha", 40.4100, -3.6950},
+                            {"Gasolinera BP Gran Vía", 40.4200, -3.7000},
+                            {"Gasolinera Shell Cuatro Caminos", 40.4500, -3.7100}
+                        };
+                        description = "Estación de servicio";
+                    }
+                    
+                    if (sampleData != null) {
+                        for (Object[] data : sampleData) {
+                            dataMap.addMarker(
+                                (Double)data[1], (Double)data[2], 
+                                (String)data[0], description
+                            );
+                        }
+                        
+                        Clients.showNotification(
+                            "Datos de " + dataSourceCombo.getSelectedItem().getLabel() + " cargados", 
+                            "info", null, null, 3000
+                        );
+                    }
+                }
+            });
+            
+            // Inicializar valores
+            dataSourceCombo.setSelectedIndex(0);
+        ]]></zscript>
+    </window>
+</zk>

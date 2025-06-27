@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+    xmlns:w="client"
+    xmlns:n="native">
+    
+    <window title="Demostración del Componente de Mapa ZK" border="normal" width="100%" height="100%">
+        
+        <!-- Panel de control -->
+        <north size="120px" border="none">
+            <div style="padding: 10px;">
+                <hbox spacing="10px" align="center">
+                    <label value="Latitud:"/>
+                    <doublebox id="latBox" value="40.4168" width="100px"/>
+                    
+                    <label value="Longitud:"/>
+                    <doublebox id="lngBox" value="-3.7038" width="100px"/>
+                    
+                    <label value="Zoom:"/>
+                    <intbox id="zoomBox" value="10" width="80px"/>
+                    
+                    <button id="centerBtn" label="Centrar Mapa"/>
+                </hbox>
+                
+                <hbox spacing="10px" align="center" style="margin-top: 10px;">
+                    <label value="Tipo de Mapa:"/>
+                    <combobox id="mapTypeCombo" width="120px" readonly="true">
+                        <comboitem label="OpenStreetMap" value="osm"/>
+                        <comboitem label="Satélite" value="satellite"/>
+                        <comboitem label="Terreno" value="terrain"/>
+                    </combobox>
+                    
+                    <checkbox id="controlsCheck" label="Mostrar Controles" checked="true"/>
+                    <checkbox id="markersCheck" label="Permitir Marcadores" checked="true"/>
+                    
+                    <button id="addMarkerBtn" label="Agregar Marcador"/>
+                    <button id="clearMarkersBtn" label="Limpiar Marcadores"/>
+                </hbox>
+            </div>
+        </north>
+        
+        <!-- Mapa principal -->
+        <center>
+            <mapcomponent id="mapComponent" 
+                         width="100%" 
+                         height="100%"
+                         latitude="40.4168"
+                         longitude="-3.7038"
+                         zoom="10"
+                         mapType="osm"
+                         showControls="true"
+                         allowMarkers="true">
+                <attribute name="onMapClick">
+                    <![CDATA[
+                        double lat = event.getLatitude();
+                        double lng = event.getLongitude();
+                        
+                        // Actualizar las cajas de texto
+                        latBox.setValue(lat);
+                        lngBox.setValue(lng);
+                        
+                        // Mostrar información
+                        Clients.showNotification(
+                            String.format("Clic en mapa: %.4f, %.4f", lat, lng),
+                            "info", null, null, 3000
+                        );
+                    ]]>
+                </attribute>
+                
+                <attribute name="onMarkerClick">
+                    <![CDATA[
+                        int markerIndex = event.getMarkerIndex();
+                        Clients.showNotification(
+                            "Clic en marcador #" + markerIndex,
+                            "info", null, null, 3000
+                        );
+                    ]]>
+                </attribute>
+            </mapcomponent>
+        </center>
+        
+        <!-- Panel de información -->
+        <south size="150px" border="none" splittable="true">
+            <div style="padding: 10px;">
+                <label value="Información del Mapa" style="font-weight: bold;"/>
+                <separator/>
+                <grid>
+                    <columns>
+                        <column label="Propiedad" width="150px"/>
+                        <column label="Valor"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="Coordenadas actuales:"/>
+                            <label id="coordsLabel" value="40.4168, -3.7038"/>
+                        </row>
+                        <row>
+                            <label value="Nivel de zoom:"/>
+                            <label id="zoomLabel" value="10"/>
+                        </row>
+                        <row>
+                            <label value="Número de marcadores:"/>
+                            <label id="markersCountLabel" value="0"/>
+                        </row>
+                    </rows>
+                </grid>
+            </div>
+        </south>
+        
+        <zscript><![CDATA[
+            import com.zkoss.component.map.*;
+            import org.zkoss.zul.*;
+            import org.zkoss.zk.ui.event.*;
+            import org.zkoss.zk.ui.util.Clients;
+            
+            // Variables para conteo de marcadores
+            int markerCount = 0;
+            
+            // Event listeners para los controles
+            centerBtn.addEventListener("onClick", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    double lat = latBox.getValue();
+                    double lng = lngBox.getValue();
+                    int zoom = zoomBox.getValue();
+                    
+                    mapComponent.setMapView(lat, lng, zoom);
+                    coordsLabel.setValue(String.format("%.4f, %.4f", lat, lng));
+                    zoomLabel.setValue(String.valueOf(zoom));
+                }
+            });
+            
+            addMarkerBtn.addEventListener("onClick", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    double lat = latBox.getValue();
+                    double lng = lngBox.getValue();
+                    
+                    markerCount++;
+                    mapComponent.addMarker(lat, lng, 
+                        "Marcador " + markerCount, 
+                        "Descripción del marcador " + markerCount);
+                    
+                    markersCountLabel.setValue(String.valueOf(markerCount));
+                    
+                    Clients.showNotification(
+                        "Marcador agregado en: " + String.format("%.4f, %.4f", lat, lng),
+                        "info", null, null, 3000
+                    );
+                }
+            });
+            
+            clearMarkersBtn.addEventListener("onClick", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    mapComponent.clearMarkers();
+                    markerCount = 0;
+                    markersCountLabel.setValue("0");
+                    
+                    Clients.showNotification("Todos los marcadores han sido eliminados", 
+                        "info", null, null, 3000);
+                }
+            });
+            
+            mapTypeCombo.addEventListener("onSelect", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    String mapType = mapTypeCombo.getSelectedItem().getValue();
+                    mapComponent.setMapType(mapType);
+                }
+            });
+            
+            controlsCheck.addEventListener("onCheck", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    mapComponent.setShowControls(controlsCheck.isChecked());
+                }
+            });
+            
+            markersCheck.addEventListener("onCheck", new EventListener() {
+                public void onEvent(Event event) throws Exception {
+                    mapComponent.setAllowMarkers(markersCheck.isChecked());
+                }
+            });
+            
+            // Inicializar valores
+            mapTypeCombo.setSelectedIndex(0);
+        ]]></zscript>
+    </window>
+</zk>

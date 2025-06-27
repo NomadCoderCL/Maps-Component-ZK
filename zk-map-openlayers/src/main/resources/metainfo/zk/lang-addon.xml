@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-addon>
+    <addon-name>zkmap-openlayers</addon-name>
+    <language-name>xul/html</language-name>
+    <depends>zul</depends>
+    <depends>zkmap-core</depends>
+    
+    <version>
+        <version-class>com.zkoss.component.map.openlayers.Version</version-class>
+        <version-uid>1.0.0</version-uid>
+    </version>
+    
+    <component>
+        <component-name>olmap</component-name>
+        <component-class>com.zkoss.component.map.openlayers.OLMapComponent</component-class>
+        <widget-class>zkoss.component.map.openlayers.OLMap</widget-class>
+        <mold>
+            <mold-name>default</mold-name>
+            <mold-uri>mold/olmap.js</mold-uri>
+        </mold>
+        <stylesheet>css/olmap.css</stylesheet>
+        
+        <!-- Eventos -->
+        <custom-attribute>
+            <attribute-name>onMapClick</attribute-name>
+            <property-name>onMapClick</property-name>
+            <attribute-type>event</attribute-type>
+        </custom-attribute>
+        <custom-attribute>
+            <attribute-name>onMarkerClick</attribute-name>
+            <property-name>onMarkerClick</property-name>
+            <attribute-type>event</attribute-type>
+        </custom-attribute>
+    </component>
+    
+    <javascript src="js/openlayers/ol.js" charset="UTF-8"/>
+</language-addon>

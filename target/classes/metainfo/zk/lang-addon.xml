@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-addon>
+    <addon-name>zk-map-component</addon-name>
+    <version>1.0.0</version>
+    <language-name>xul/html</language-name>
+    
+    <!-- Definición del componente -->
+    <component>
+        <component-name>mapcomponent</component-name>
+        <component-class>com.zkoss.component.map.MapComponent</component-class>
+        <widget-class>zkoss.component.map.MapComponent</widget-class>
+        <mold>
+            <mold-name>default</mold-name>
+            <mold-uri>~./zul/html/mapcomponent.dsp</mold-uri>
+        </mold>
+    </component>
+    
+    <!-- JavaScript files -->
+    <javascript src="~./js/zkoss/component/map/MapComponent.js"/>
+    <javascript src="https://cdn.jsdelivr.net/npm/ol@7.2.2/dist/ol.js"/>
+    
+    <!-- CSS files -->
+    <stylesheet src="~./css/zkoss/component/map/MapComponent.css"/>
+    <stylesheet src="https://cdn.jsdelivr.net/npm/ol@7.2.2/ol.css"/>
+    
+    <!-- Procesadores de eventos personalizados -->
+    <event>
+        <event-name>onMapClick</event-name>
+        <event-class>com.zkoss.component.map.MapClickEvent</event-class>
+    </event>
+    <event>
+        <event-name>onMarkerClick</event-name>
+        <event-class>com.zkoss.component.map.MarkerClickEvent</event-class>
+    </event>
+</language-addon>
