@@ -276,7 +276,8 @@ Para reportar bugs:
 3. Proporcionar ejemplo de código si es posible
 
 Solicitar funcionalidades:
-1.contactar a dev.cristian.caysm@gmail.com
+
+1. Contactar a dev.cristian.caysm@gmail.com
 
 ## Changelog
 
