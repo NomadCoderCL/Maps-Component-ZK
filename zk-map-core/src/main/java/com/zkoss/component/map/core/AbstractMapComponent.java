@@ -133,10 +133,10 @@ public abstract class AbstractMapComponent extends XulElement implements MapComp
     
     @Override
     public void setMapView(double lat, double lng, int zoom) {
-        this.latitude = lat;
-        this.longitude = lng;
-        this.zoom = zoom;
-        
+        setLatitude(lat);
+        setLongitude(lng);
+        setZoom(zoom);
+
         // La implementación específica debe manejar cómo actualizar el mapa
         handleSetMapView(lat, lng, zoom);
     }
