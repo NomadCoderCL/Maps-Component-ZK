@@ -18,7 +18,7 @@ public abstract class AbstractMapComponent extends XulElement implements MapComp
     protected double latitude = 40.4168; // Madrid por defecto
     protected double longitude = -3.7038;
     protected int zoom = 10;
-    protected String mapType = "standard"; // Tipo de mapa por defecto
+    protected String mapType = "osm"; // Tipo de mapa por defecto
     protected boolean showControls = true;
     protected JSONArray markers = new JSONArray();
     
