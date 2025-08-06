@@ -47,15 +47,6 @@ public class OLMapComponent extends AbstractMapComponent {
         response("centerMap", data);
     }
     
-    @Override
-    protected void handleSetMapView(double lat, double lng, int zoom) {
-        JSONObject data = new JSONObject();
-        data.put("lat", lat);
-        data.put("lng", lng);
-        data.put("zoom", zoom);
-        response("setMapView", data);
-    }
-    
     // Eventos del mapa
     @Override
     public void service(AuRequest request, boolean everError) {
