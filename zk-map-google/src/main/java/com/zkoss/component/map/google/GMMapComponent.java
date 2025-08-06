@@ -67,15 +67,6 @@ public class GMMapComponent extends AbstractMapComponent {
     }
     
     @Override
-    protected void handleSetMapView(double lat, double lng, int zoom) {
-        JSONObject data = new JSONObject();
-        data.put("lat", lat);
-        data.put("lng", lng);
-        data.put("zoom", zoom);
-        response("setMapView", data);
-    }
-    
-    @Override
     protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
             throws java.io.IOException {
         super.renderProperties(renderer);
