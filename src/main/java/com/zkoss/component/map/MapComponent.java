@@ -6,6 +6,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.json.JSONObject;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.json.JSONArray;
 
 /**
@@ -134,19 +135,19 @@ public class MapComponent extends XulElement {
         marker.put("description", description);
         markers.add(marker);
         
-        response("addMarker", marker);
+        response(new AuInvoke(this, "addMarker", marker));
     }
     
     public void removeMarker(int index) {
         if (index >= 0 && index < markers.size()) {
             markers.remove(index);
-            response("removeMarker", index);
+            response(new AuInvoke(this, "removeMarker", index));
         }
     }
     
     public void clearMarkers() {
         markers.clear();
-        response("clearMarkers", null);
+        response(new AuInvoke(this, "clearMarkers", null));
     }
     
     public JSONArray getMarkers() {
@@ -160,7 +161,7 @@ public class MapComponent extends XulElement {
         JSONObject data = new JSONObject();
         data.put("lat", lat);
         data.put("lng", lng);
-        response("centerMap", data);
+        response(new AuInvoke(this, "centerMap", data));
     }
     
     // Método para establecer vista del mapa
@@ -172,7 +173,7 @@ public class MapComponent extends XulElement {
         data.put("lat", lat);
         data.put("lng", lng);
         data.put("zoom", zoom);
-        response("setMapView", data);
+        response(new AuInvoke(this, "setMapView", data));
     }
     
     @Override
@@ -201,7 +202,10 @@ public class MapComponent extends XulElement {
     }
     
     private void handleMapClick(org.zkoss.zk.au.AuRequest request) {
-        final Object[] data = request.getData();
+        java.util.Map<String, Object> reqData = request.getData();
+        Object dataObj = reqData != null ? reqData.get("data") : null;
+        if (dataObj == null && reqData != null) dataObj = reqData.get("");
+        final Object[] data = (dataObj instanceof java.util.List) ? ((java.util.List<?>)dataObj).toArray() : (Object[]) dataObj;
         if (data != null && data.length >= 2) {
             double lat = ((Number) data[0]).doubleValue();
             double lng = ((Number) data[1]).doubleValue();
@@ -212,7 +216,10 @@ public class MapComponent extends XulElement {
     }
     
     private void handleMarkerClick(org.zkoss.zk.au.AuRequest request) {
-        final Object[] data = request.getData();
+        java.util.Map<String, Object> reqData = request.getData();
+        Object dataObj = reqData != null ? reqData.get("data") : null;
+        if (dataObj == null && reqData != null) dataObj = reqData.get("");
+        final Object[] data = (dataObj instanceof java.util.List) ? ((java.util.List<?>)dataObj).toArray() : (Object[]) dataObj;
         if (data != null && data.length >= 1) {
             int markerIndex = ((Number) data[0]).intValue();
             

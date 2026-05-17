@@ -1,0 +1,5 @@
+com\zkoss\component\map\core\Version.class
+com\zkoss\component\map\core\MapComponentInterface.class
+com\zkoss\component\map\core\AbstractMapComponent.class
+com\zkoss\component\map\core\MapClickEvent.class
+com\zkoss\component\map\core\MarkerClickEvent.class

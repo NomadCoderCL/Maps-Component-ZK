@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.zkoss.component.map.google","l":"GMMapComponent"},{"p":"com.zkoss.component.map.google","l":"Version"}];updateSearchResults();

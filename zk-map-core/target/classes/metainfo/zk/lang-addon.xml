@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-addon>
+    <addon-name>zkmap-core</addon-name>
+    <language-name>xul/html</language-name>
+    <depends>zul</depends>
+    
+    <version>
+        <version-class>com.zkoss.component.map.core.Version</version-class>
+        <version-uid>1.0.0</version-uid>
+    </version>
+    
+    <component-directory name="zkmap.core" />
+</language-addon>

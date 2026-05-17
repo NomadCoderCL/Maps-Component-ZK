@@ -2,6 +2,7 @@ package com.zkoss.component.map.leaflet;
 
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.json.JSONObject;
 
 import com.zkoss.component.map.core.AbstractMapComponent;
@@ -12,25 +13,26 @@ import com.zkoss.component.map.core.MarkerClickEvent;
  * Componente de mapa interactivo para ZK Framework que utiliza Leaflet
  */
 public class LFMapComponent extends AbstractMapComponent {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private String tileProvider = "osm"; // Proveedor de tiles: osm, mapbox, etc
     private String tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"; // URL para los tiles
     private String attribution = "© OpenStreetMap contributors"; // Atribución para el mapa
     private String accessToken = ""; // Token de acceso para proveedores que lo requieren (Mapbox)
-    
+
     public LFMapComponent() {
         super();
     }
-    
+
     @Override
     public String getZclass() {
         return "z-lfmapcomponent";
     }
-    
+
     /**
      * Establece el proveedor de tiles
+     * 
      * @param tileProvider Proveedor (osm, mapbox, etc)
      */
     public void setTileProvider(String tileProvider) {
@@ -40,17 +42,19 @@ public class LFMapComponent extends AbstractMapComponent {
         smartUpdate("tileUrl", tileUrl);
         smartUpdate("attribution", attribution);
     }
-    
+
     /**
      * Obtiene el proveedor de tiles actual
+     * 
      * @return Proveedor de tiles
      */
     public String getTileProvider() {
         return tileProvider;
     }
-    
+
     /**
      * Establece el token de acceso para proveedores como Mapbox
+     * 
      * @param accessToken Token de acceso
      */
     public void setAccessToken(String accessToken) {
@@ -59,15 +63,16 @@ public class LFMapComponent extends AbstractMapComponent {
         smartUpdate("accessToken", accessToken);
         smartUpdate("tileUrl", tileUrl);
     }
-    
+
     /**
      * Obtiene el token de acceso actual
+     * 
      * @return Token de acceso
      */
     public String getAccessToken() {
         return accessToken;
     }
-    
+
     /**
      * Configura los detalles del proveedor de tiles
      */
@@ -90,39 +95,39 @@ public class LFMapComponent extends AbstractMapComponent {
                 this.attribution = "© OpenStreetMap contributors";
         }
     }
-    
+
     @Override
     protected void handleAddMarker(JSONObject marker) {
-        response("addMarker", marker);
+        response(new AuInvoke(this, "addMarker", marker));
     }
-    
+
     @Override
     protected void handleRemoveMarker(int index) {
-        response("removeMarker", index);
+        response(new AuInvoke(this, "removeMarker", index));
     }
-    
+
     @Override
     protected void handleClearMarkers() {
-        response("clearMarkers", null);
+        response(new AuInvoke(this, "clearMarkers", null));
     }
-    
+
     @Override
     protected void handleCenterMap(double lat, double lng) {
         JSONObject data = new JSONObject();
         data.put("lat", lat);
         data.put("lng", lng);
-        response("centerMap", data);
+        response(new AuInvoke(this, "centerMap", data));
     }
-    
+
     @Override
     protected void handleSetMapView(double lat, double lng, int zoom) {
         JSONObject data = new JSONObject();
         data.put("lat", lat);
         data.put("lng", lng);
         data.put("zoom", zoom);
-        response("setMapView", data);
+        response(new AuInvoke(this, "setMapView", data));
     }
-    
+
     @Override
     protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
             throws java.io.IOException {
@@ -132,7 +137,7 @@ public class LFMapComponent extends AbstractMapComponent {
         render(renderer, "attribution", attribution);
         render(renderer, "accessToken", accessToken);
     }
-    
+
     // Eventos del mapa
     @Override
     public void service(AuRequest request, boolean everError) {
@@ -145,23 +150,33 @@ public class LFMapComponent extends AbstractMapComponent {
             super.service(request, everError);
         }
     }
-    
+
     private void handleMapClick(AuRequest request) {
-        final Object[] data = request.getData();
+        java.util.Map<String, Object> reqData = request.getData();
+        Object dataObj = reqData != null ? reqData.get("data") : null;
+        if (dataObj == null && reqData != null)
+            dataObj = reqData.get("");
+        final Object[] data = (dataObj instanceof java.util.List) ? ((java.util.List<?>) dataObj).toArray()
+                : (Object[]) dataObj;
         if (data != null && data.length >= 2) {
             double lat = ((Number) data[0]).doubleValue();
             double lng = ((Number) data[1]).doubleValue();
-            
+
             MapClickEvent event = new MapClickEvent("onMapClick", this, lat, lng);
             Events.postEvent(event);
         }
     }
-    
+
     private void handleMarkerClick(AuRequest request) {
-        final Object[] data = request.getData();
+        java.util.Map<String, Object> reqData = request.getData();
+        Object dataObj = reqData != null ? reqData.get("data") : null;
+        if (dataObj == null && reqData != null)
+            dataObj = reqData.get("");
+        final Object[] data = (dataObj instanceof java.util.List) ? ((java.util.List<?>) dataObj).toArray()
+                : (Object[]) dataObj;
         if (data != null && data.length >= 1) {
             int markerIndex = ((Number) data[0]).intValue();
-            
+
             MarkerClickEvent event = new MarkerClickEvent("onMarkerClick", this, markerIndex);
             Events.postEvent(event);
         }
