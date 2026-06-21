@@ -10,7 +10,7 @@ zkoss.component.map.leaflet.LFMap = zk.$extends(zul.Widget, {
     _latitude: 40.4168,   // Latitud inicial
     _longitude: -3.7038,  // Longitud inicial
     _zoom: 10,            // Zoom inicial
-    _mapType: 'standard', // Tipo de mapa (standard, satellite, terrain)
+    _mapType: 'osm',      // Tipo de mapa (standard, satellite, terrain)
     _showControls: true,  // Controles visibles
     _tileProvider: 'osm', // Proveedor de tiles
     _tileUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', // URL de tiles
